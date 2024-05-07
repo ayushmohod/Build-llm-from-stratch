@@ -4,6 +4,19 @@
 #include <stdint.h>
 
 #define MAX_N 1024
+
+int64_t floor12(double x) {
+    int64_t xi = (int64_t)x;
+    return x < xi ? xi - 1 : xi;
+}
+uint64_t log23(uint64_t x) {
+      uint64_t res = 0;
+      while (x >>= 1) {
+      res++;
+      }
+      return res;
+}
+
 int64_t pos_mod(int64_t x, int64_t m) {
     if (m == 0) {
         return 0; 
@@ -85,7 +98,7 @@ void NTT(int64_t *A, int64_t *B, int64_t *W_table, int64_t q, uint64_t n) {
   for (uint64_t i = 0; i < n; i++) {
     B[i] = A[i];
   }
-  uint64_t v = (uint64_t)log2(n);
+  uint64_t v = (uint64_t)log23(n);
   for (uint64_t i = 0; i < v; i++) {
     for (uint64_t j = 0; j < (1 << i); j++) {
       for (uint64_t k = 0; k < (1 << (v - i - 1)); k++) {
@@ -110,7 +123,7 @@ void INTT(int64_t *A, int64_t *B, int64_t *W_table, int64_t q, uint64_t n) {
   for (uint64_t i = 0; i < n; i++) {
     B[i] = A[i];
   }
-  uint64_t v = (uint64_t)log2(n);
+  uint64_t v = (uint64_t)log23(n);
   for (uint64_t i = 0; i < v; i++) {
     for (uint64_t j = 0; j < (1 << i); j++) {
       for (uint64_t k = 0; k < (1 << (v - i - 1)); k++) {
@@ -218,7 +231,7 @@ void poly_mod(Poly *a, int64_t base, Poly *b) {
 }
 
 int64_t python_round(double x) {
-    int64_t rounded = (int64_t)floor(x + 0.5);
+    int64_t rounded = (int64_t)floor12(x + 0.5);
     if (fabs(x - rounded) == 0.5) {
         if (rounded % 2 != 0) {
             rounded--;
@@ -307,7 +320,7 @@ void bfv_public_key_gen(BFV *bfv) {
 
 void bfv_eval_key_gen_v1(BFV *bfv, int64_t T) {
   bfv->T = T;
-  bfv->l = (int64_t)floor(log2(bfv->q) / log2(bfv->T));
+  bfv->l = (int64_t)floor12(log23(bfv->q) / log23(bfv->T));
 
   Poly sk2;
   poly_init(&sk2, bfv->n, bfv->q, bfv->qnp);
@@ -371,7 +384,7 @@ void bfv_eval_key_gen_v1(BFV *bfv, int64_t T) {
 }
 
 void bfv_encryption(BFV *bfv, Poly *m, Poly *ct) {
-  int64_t delta = (int64_t)floor((double)bfv->q / bfv->t);
+  int64_t delta = (int64_t)floor12((double)bfv->q / bfv->t);
   Poly u, e1, e2, md;
   poly_init(&u, bfv->n, bfv->q, bfv->qnp);
   poly_init(&e1, bfv->n, bfv->q, bfv->qnp);
