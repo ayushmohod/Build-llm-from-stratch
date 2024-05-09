@@ -1,3 +1,59 @@
+
+
+#include <stdio.h>
+#include <gmp.h>
+
+int main() {
+    mpz_t num1, num2, sum;
+
+    // Initialize the GMP variables
+    mpz_init(num1);
+    mpz_init(num2);
+    mpz_init(sum);
+
+    // Assign values to the GMP variables
+    mpz_set_str(num1, "1234567890123456789012345678901234567890", 10);
+    mpz_set_str(num2, "9876543210987654321098765432109876543210", 10);
+
+    // Add the two numbers
+    mpz_add(sum, num1, num2);
+
+    // Print the result
+    printf("num1 = ");
+    mpz_out_str(stdout, 10, num1);
+    printf("\n");
+
+    printf("num2 = ");
+    mpz_out_str(stdout, 10, num2);
+    printf("\n");
+
+    printf("sum  = ");
+    mpz_out_str(stdout, 10, sum);
+    printf("\n");
+
+    // Clear the GMP variables
+    mpz_clear(num1);
+    mpz_clear(num2);
+    mpz_clear(sum);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
